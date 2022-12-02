@@ -56,7 +56,7 @@ fastifyInstance.get("/:size/:key", {
 );
 
 try {
-    await fastifyInstance.listen({ port: parseInt(process.env.PORT ?? process.env.SERVER_PORT ?? "3000") });
+    await fastifyInstance.listen({ port: parseInt(process.env.PORT ?? process.env.SERVER_PORT ?? "3000"), host: "0.0.0.0" });
 } catch (e) {
     fastifyInstance.log.error(e);
     process.exit(1);
