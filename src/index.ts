@@ -38,6 +38,7 @@ fastifyInstance.get("/:size/:key", {
         }, async (request: FastifyRequest<{ Params: { size: string; key: string; }}>, reply: FastifyReply) => {
             const { size, key } = request.params;
             const [width, height] = size.split("x").map((s) => parseInt(s, 10));
+            if (width > (parseInt(process.env.MAX_WITDH ?? "4096")) || height > (parseInt(process.env.MAX_HEIGHT ?? "4096"))) throw new Error("Image too large");
 
             const decipher = crypto.createDecipheriv("aes-256-cbc", process.env.KEY!, process.env.IV!);
             const decrypted = decipher.update(key, "hex");
