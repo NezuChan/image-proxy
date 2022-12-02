@@ -1,0 +1,47 @@
+import "dotenv/config";
+
+import fastify from "fastify";
+import crypto from "crypto";
+import jimp from "jimp";
+import { FastifyReply } from "fastify/types/reply";
+import { FastifyRequest } from "fastify/types/request";
+
+const fastifyInstance = fastify({ logger: true, maxParamLength: Number.MAX_SAFE_INTEGER });
+
+fastifyInstance.get("/:size/:key", { 
+    schema: {
+        params: {
+            type: "object",
+            properties: {
+                height: { type: "string" },
+                width: { type: "string" },
+                key: { type: "string" },
+            }
+        }
+    }
+        }, async (request: FastifyRequest<{ Params: { size: string; key: string; }}>, reply: FastifyReply) => {
+            const { size, key } = request.params;
+            const [width, height] = size.split("x").map((s) => parseInt(s, 10));
+
+            const decipher = crypto.createDecipheriv("aes-256-cbc", process.env.KEY!, process.env.IV!);
+            const decrypted = decipher.update(key, "hex");
+            const decryptedString = Buffer.concat([decrypted, decipher.final()]).toString();
+
+            const image = await jimp.read(decryptedString);
+            image.resize(width, height, jimp.RESIZE_HERMITE);
+            image.quality(100);
+            image.normalize();
+
+            const buffer = await image.getBufferAsync(jimp.MIME_PNG);
+
+            reply.header("Content-Type", jimp.MIME_PNG);
+            return buffer;
+        }
+);
+
+try {
+    await fastifyInstance.listen({ port: parseInt(process.env.PORT ?? process.env.SERVER_PORT ?? "3000") });
+} catch (e) {
+    fastifyInstance.log.error(e);
+    process.exit(1);
+}
