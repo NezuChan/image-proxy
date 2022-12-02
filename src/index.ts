@@ -6,7 +6,23 @@ import jimp from "jimp";
 import { FastifyReply } from "fastify/types/reply";
 import { FastifyRequest } from "fastify/types/request";
 
-const fastifyInstance = fastify({ logger: true, maxParamLength: Number.MAX_SAFE_INTEGER });
+const fastifyInstance = fastify({ 
+    logger: {
+        name: "image-proxy",
+        timestamp: true,
+        level: process.env.NODE_ENV === "production" ? "info" : "trace",
+        formatters: {
+            bindings: () => ({
+                pid: "Image Proxy"
+            })
+        },
+        transport: {
+            targets: [
+                { target: "pino-pretty", level: process.env.NODE_ENV === "production" ? "info" : "trace", options: { translateTime: "SYS:yyyy-mm-dd HH:MM:ss.l o" } }
+            ]
+        }
+    }, 
+    maxParamLength: Number.MAX_SAFE_INTEGER });
 
 fastifyInstance.get("/:size/:key", { 
     schema: {
