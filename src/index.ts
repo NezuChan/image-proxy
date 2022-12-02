@@ -1,12 +1,12 @@
 import "dotenv/config";
 
-import fastify from "fastify";
-import crypto from "crypto";
-import jimp from "jimp";
+import Fastify from "fastify";
+import Crypto from "crypto";
+import Jimp from "jimp";
 import { FastifyReply } from "fastify/types/reply";
 import { FastifyRequest } from "fastify/types/request";
 
-const fastifyInstance = fastify({ 
+const fastifyInstance = Fastify({ 
     logger: {
         name: "image-proxy",
         timestamp: true,
@@ -22,7 +22,8 @@ const fastifyInstance = fastify({
             ]
         }
     }, 
-    maxParamLength: Number.MAX_SAFE_INTEGER });
+    maxParamLength: Number.MAX_SAFE_INTEGER 
+});
 
 fastifyInstance.get("/:size/:key", { 
     schema: {
@@ -39,17 +40,17 @@ fastifyInstance.get("/:size/:key", {
             const [width, height] = size.split("x").map((s) => parseInt(s, 10));
             if (width > (parseInt(process.env.MAX_WITDH ?? "4096")) || height > (parseInt(process.env.MAX_HEIGHT ?? "4096"))) throw new Error("Image too large");
 
-            const decipher = crypto.createDecipheriv("aes-256-cbc", process.env.KEY!, process.env.IV!);
+            const decipher = Crypto.createDecipheriv("aes-256-cbc", process.env.KEY!, process.env.IV!);
             const decrypted = decipher.update(key, "hex");
             const decryptedString = Buffer.concat([decrypted, decipher.final()]).toString();
 
-            const image = await jimp.read(decryptedString);
-            image.resize(width, height, jimp.RESIZE_HERMITE);
+            const image = await Jimp.read(decryptedString);
+            image.resize(width, height, Jimp.RESIZE_HERMITE);
             image.quality(100);
 
-            const buffer = await image.getBufferAsync(jimp.MIME_PNG);
+            const buffer = await image.getBufferAsync(Jimp.MIME_PNG);
 
-            reply.header("Content-Type", jimp.MIME_PNG);
+            reply.header("Content-Type", Jimp.MIME_PNG);
             return buffer;
         }
 );
