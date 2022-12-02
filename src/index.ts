@@ -29,8 +29,7 @@ fastifyInstance.get("/:size/:key", {
         params: {
             type: "object",
             properties: {
-                height: { type: "string" },
-                width: { type: "string" },
+                size: { type: "string" },
                 key: { type: "string" },
             }
         }
@@ -47,7 +46,6 @@ fastifyInstance.get("/:size/:key", {
             const image = await jimp.read(decryptedString);
             image.resize(width, height, jimp.RESIZE_HERMITE);
             image.quality(100);
-            image.normalize();
 
             const buffer = await image.getBufferAsync(jimp.MIME_PNG);
 
