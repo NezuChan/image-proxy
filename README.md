@@ -10,3 +10,9 @@
 [![Discord](https://discordapp.com/api/guilds/785715968608567297/embed.png)](https://nezu.my.id)
 
 </div>
+
+# Features
+- Using sharp library
+- Secure image routing, this service ideal when you are trying to hide origin request. using `aes-256-cbc` encryption for encrypting origin url
+- Docker ready
+- Production Ready

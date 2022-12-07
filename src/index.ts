@@ -1,10 +1,10 @@
 import "dotenv/config";
 
-import Fastify from "fastify";
 import Crypto from "crypto";
-import Jimp from "jimp";
-import { FastifyReply } from "fastify/types/reply";
-import { FastifyRequest } from "fastify/types/request";
+import Fastify, { FastifyReply, FastifyRequest } from "fastify";
+import { fetch, FetchResultTypes } from "@kirishima/fetch";
+import Sharp, { FormatEnum } from "sharp";
+import { fileTypeFromBuffer } from "file-type";
 
 const fastifyInstance = Fastify({
     logger: {
@@ -37,11 +37,11 @@ fastifyInstance.get("/:size/:key", {
         querystring: {
             type: "object",
             properties: {
-                format: { type: "string", enum: ["png", "jpg", "jpeg", "webp"] }
+                format: { type: "string" }
             }
         }
     }
-}, async (request: FastifyRequest<{ Params: { size: string; key: string }; Querystring: { format: "jpeg" | "png" } }>, reply: FastifyReply) => {
+}, async (request: FastifyRequest<{ Params: { size: string; key: string }; Querystring?: { format?: keyof FormatEnum } }>, reply: FastifyReply) => {
     const { size, key } = request.params;
     const [width, height] = size.split("x").map(s => parseInt(s));
     if (width > parseInt(process.env.MAX_WITDH ?? "4096") || height > parseInt(process.env.MAX_HEIGHT ?? "4096")) throw new Error("Image too large");
@@ -50,14 +50,15 @@ fastifyInstance.get("/:size/:key", {
     const decrypted = decipher.update(key, "hex");
     const decryptedString = Buffer.concat([decrypted, decipher.final()]).toString();
 
-    const image = await Jimp.read(decryptedString);
-    image.resize(width, height, Jimp.RESIZE_HERMITE);
-    image.quality(100);
+    const responseBuffer = await fetch(decryptedString, { redirect: "follow" }, FetchResultTypes.Buffer);
 
-    const buffer = await image.getBufferAsync(request.query.format === "jpeg" ? Jimp.MIME_JPEG : Jimp.MIME_PNG);
+    const imageBuffer = await Sharp(responseBuffer)
+        .resize(width, height)
+        .toFormat(request.query?.format ?? "png", { quality: 100 })
+        .toBuffer();
 
-    await reply.header("Content-Type", request.query.format === "jpeg" ? Jimp.MIME_JPEG : Jimp.MIME_PNG);
-    return buffer;
+    const mimeType = await fileTypeFromBuffer(imageBuffer);
+    return reply.header("Content-Type", mimeType?.mime ?? "image/png").send(imageBuffer);
 });
 
 try {

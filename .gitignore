@@ -125,9 +125,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-
-# Lockfiles
-.yarn.lock
-.pnp.js
-yarn.lock
-package-lock.json
