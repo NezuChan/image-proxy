@@ -33,9 +33,15 @@ fastifyInstance.get("/:size/:key", {
                 size: { type: "string" },
                 key: { type: "string" },
             }
+        },
+        querystring: {
+            type: "object",
+            properties: {
+                format: { type: "string", enum: ["png", "jpg", "jpeg", "webp"] },
+            }
         }
     }
-        }, async (request: FastifyRequest<{ Params: { size: string; key: string; }}>, reply: FastifyReply) => {
+        }, async (request: FastifyRequest<{ Params: { size: string; key: string; }, Querystring: { format: "png" | "jpeg" }}>, reply: FastifyReply) => {
             const { size, key } = request.params;
             const [width, height] = size.split("x").map((s) => parseInt(s, 10));
             if (width > (parseInt(process.env.MAX_WITDH ?? "4096")) || height > (parseInt(process.env.MAX_HEIGHT ?? "4096"))) throw new Error("Image too large");
@@ -48,9 +54,9 @@ fastifyInstance.get("/:size/:key", {
             image.resize(width, height, Jimp.RESIZE_HERMITE);
             image.quality(100);
 
-            const buffer = await image.getBufferAsync(Jimp.MIME_PNG);
+            const buffer = await image.getBufferAsync(request.query.format === "jpeg" ? Jimp.MIME_JPEG : Jimp.MIME_PNG);
 
-            reply.header("Content-Type", Jimp.MIME_PNG);
+            reply.header("Content-Type", request.query.format === "jpeg" ? Jimp.MIME_JPEG : Jimp.MIME_PNG);
             return buffer;
         }
 );

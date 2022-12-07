@@ -1,6 +1,6 @@
 {
   "name": "@nezuchan/image-proxy",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "A Image proxy service, such as resizing.",
   "main": "dist",
   "scripts": {
