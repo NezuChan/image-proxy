@@ -1,4 +1,4 @@
-FROM node:16-alpine3.14 as build-stage
+FROM node:18-alpine3.14 as build-stage
 
 LABEL name "NezukoChan Image Proxy (Docker Build)"
 LABEL maintainer "KagChi"
@@ -17,7 +17,7 @@ RUN npm run build
 
 RUN npm prune --production
 
-FROM node:16-alpine3.14
+FROM node:18-alpine3.14
 
 LABEL name "NezukoChan Image Proxy"
 LABEL maintainer "KagChi"
