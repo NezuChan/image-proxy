@@ -45,7 +45,7 @@
     "dotenv": "^16.0.3",
     "fastify": "^4.11.0",
     "file-type": "^18.0.0",
-    "pino-pretty": "^9.1.1",
+    "pino-pretty": "^10.0.0",
     "sharp": "^0.31.3",
     "undici": "^5.14.0"
   }
