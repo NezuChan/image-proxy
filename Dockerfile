@@ -1,4 +1,4 @@
-FROM node:16-alpine3.14 as build-stage
+FROM golang:1.20-alpine as build-stage
 
 LABEL name "NezukoChan Image Proxy (Docker Build)"
 LABEL maintainer "KagChi"
@@ -17,7 +17,7 @@ RUN npm run build
 
 RUN npm prune --production
 
-FROM node:16-alpine3.14
+FROM golang:1.20-alpine
 
 LABEL name "NezukoChan Image Proxy"
 LABEL maintainer "KagChi"
@@ -26,9 +26,6 @@ WORKDIR /app
 
 RUN apk add --no-cache tzdata git
 
-COPY --from=build-stage /tmp/build/package.json .
-COPY --from=build-stage /tmp/build/package-lock.json .
-COPY --from=build-stage /tmp/build/node_modules ./node_modules
-COPY --from=build-stage /tmp/build/dist ./dist
+COPY --from=build-stage /tmp/build/image-proxy image-proxy
 
-CMD node dist/index.js
+CMD ./image-proxy

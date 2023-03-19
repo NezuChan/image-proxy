@@ -104,7 +104,7 @@ func main() {
 			y = header.Height()
 		}
 
-		resizeMethod := lilliput.ImageOpsFit
+		resizeMethod := lilliput.ImageOpsResize
 		if x == header.Width() && y == header.Height() {
 			resizeMethod = lilliput.ImageOpsNoResize
 		}
