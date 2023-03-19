@@ -9,7 +9,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -17,11 +16,7 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Cannot load env file")
-	}
-
+	godotenv.Load()
 	app := fiber.New()
 
 	app.Get("/:size/:image", func(c *fiber.Ctx) error {
