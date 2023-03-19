@@ -114,7 +114,7 @@ func main() {
 			Height:               y,
 			ResizeMethod:         resizeMethod,
 			NormalizeOrientation: true,
-			EncodeOptions:        map[int]int{lilliput.JpegQuality: 85},
+			EncodeOptions:        map[int]int{lilliput.JpegQuality: 100},
 		}
 
 		outputImg, _ = ops.Transform(decoder, opts, outputImg)
