@@ -5,17 +5,13 @@ LABEL maintainer "KagChi"
 
 WORKDIR /tmp/build
 
-RUN apk add --no-cache build-base git python3
+COPY go.mod go.sum ./
 
-COPY package.json .
-
-RUN npm install
+RUN go mod download
 
 COPY . .
 
-RUN npm run build
-
-RUN npm prune --production
+RUN go build
 
 FROM golang:1.20-alpine
 
