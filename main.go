@@ -18,6 +18,16 @@ import (
 func main() {
 	godotenv.Load()
 	app := fiber.New()
+	
+	key := []byte(os.Getenv("KEY"))
+	iv := []byte(os.Getenv("IV"))
+
+	block, err := aes.NewCipher(key)
+	if err != nil {
+		panic(err)
+	}
+
+	mode := cipher.NewCBCDecrypter(block, iv)
 
 	app.Get("/:size/:image", func(c *fiber.Ctx) error {
 		size := strings.Split(c.Params("size", "512x512"), "x")
@@ -47,9 +57,6 @@ func main() {
 			})
 		}
 
-		key := []byte(os.Getenv("KEY"))
-		iv := []byte(os.Getenv("IV"))
-
 		image, err := hex.DecodeString(fmt.Sprintf(c.Params("image")))
 		if err != nil {
 			return c.Status(500).JSON(fiber.Map{
@@ -58,15 +65,6 @@ func main() {
 			})
 		}
 
-		block, err := aes.NewCipher(key)
-		if err != nil {
-			return c.Status(500).JSON(fiber.Map{
-				"message":    "Unable to create cipher",
-				"statusCode": 500,
-			})
-		}
-
-		mode := cipher.NewCBCDecrypter(block, iv)
 		decrypted := make([]byte, len(image))
 		mode.CryptBlocks(decrypted, image)
 
