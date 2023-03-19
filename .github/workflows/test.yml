@@ -10,4 +10,4 @@ on:
 
 jobs:
   test:
-    uses: nezuchan/workflows/.github/workflows/golang-lint-and-compile-test.yml@main
+    uses: nezuchan/workflows/.github/workflows/golang-compile-test.yml@main
