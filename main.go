@@ -120,5 +120,5 @@ func main() {
 	host := os.Getenv("HOST")
 	port := os.Getenv("PORT")
 
-	err = app.Listen(fmt.Sprintf("%s:%s", host, port))
+	app.Listen(fmt.Sprintf("%s:%s", host, port))
 }
