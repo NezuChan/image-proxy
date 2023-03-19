@@ -16,8 +16,6 @@ LABEL maintainer "KagChi"
 
 WORKDIR /app
 
-RUN apk add --no-cache tzdata git
-
 COPY --from=build-stage /tmp/build/image-proxy image-proxy
 
 CMD ./image-proxy
