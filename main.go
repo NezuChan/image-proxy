@@ -27,8 +27,6 @@ func main() {
 		panic(err)
 	}
 
-	mode := cipher.NewCBCDecrypter(block, iv)
-
 	app.Get("/:size/:image", func(c *fiber.Ctx) error {
 		size := strings.Split(c.Params("size", "512x512"), "x")
 		x, err := strconv.Atoi(size[0])
@@ -66,6 +64,7 @@ func main() {
 		}
 
 		decrypted := make([]byte, len(image))
+		mode := cipher.NewCBCDecrypter(block, iv)
 		mode.CryptBlocks(decrypted, image)
 
 		resp, err := http.Get(string(decrypted[:len(decrypted)-int(decrypted[len(decrypted)-1])]))
