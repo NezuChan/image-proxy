@@ -7,6 +7,10 @@ WORKDIR /tmp/build
 
 COPY . .
 
+# Install deps for vips
+RUN apk add vips gcc
+
+# Build the project
 RUN go build cmd/server/main.go
 
 FROM golang:1.20-alpine
@@ -17,8 +21,5 @@ LABEL maintainer "KagChi"
 WORKDIR /app
 
 COPY --from=build-stage /tmp/build/main main
-
-# Install deps for vips
-RUN apk add vips gcc
 
 CMD ["./main"]
