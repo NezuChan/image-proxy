@@ -18,7 +18,7 @@ import (
 func main() {
 	godotenv.Load()
 	app := fiber.New()
-	
+
 	key := []byte(os.Getenv("KEY"))
 	iv := []byte(os.Getenv("IV"))
 
@@ -110,7 +110,7 @@ func main() {
 		}
 
 		outputImg, _ = ops.Transform(decoder, opts, outputImg)
-
+		c.Set("Content-Type", "image/jpeg")
 		return c.Send(outputImg)
 	})
 
