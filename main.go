@@ -70,7 +70,10 @@ func main() {
 
 		resp, err := http.Get(string(decrypted[:len(decrypted)-int(decrypted[len(decrypted)-1])]))
 		if err != nil {
-			panic(err)
+			return c.Status(500).JSON(fiber.Map{
+				"message":    "Unable to fetch origin image",
+				"statusCode": 500,
+			})
 		}
 
 		defer resp.Body.Close()
@@ -80,7 +83,13 @@ func main() {
 		outputImg := resize.Resize(uint(x), uint(y), imageData, resize.NearestNeighbor)
 		buf := new(bytes.Buffer)
 		options := &jpeg.Options{Quality: 100}
-		jpeg.Encode(buf, outputImg, options)
+		err = jpeg.Encode(buf, outputImg, options)
+		if err != nil {
+			return c.Status(500).JSON(fiber.Map{
+				"message":    "Unable to encode image.",
+				"statusCode": 500,
+			})
+		}
 		output := buf.Bytes()
 
 		c.Set("Content-Type", "image/jpeg")
