@@ -7,8 +7,8 @@ WORKDIR /tmp/build
 
 COPY . .
 
-# Install deps for vips
-RUN apk add vips gcc
+# Install needed deps
+RUN apk add libc-dev vips gcc
 
 # Build the project
 RUN go build cmd/server/main.go
