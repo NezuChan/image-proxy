@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
 	"github.com/nfnt/resize"
 	"image/jpeg"
@@ -27,6 +28,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	app.Use(logger.New())
 
 	app.Get("/:size/:image", func(c *fiber.Ctx) error {
 		size := strings.Split(c.Params("size", "512x512"), "x")
