@@ -1,4 +1,4 @@
-FROM golang:1.20 as build-stage
+FROM golang:1.20-alpine as build-stage
 
 LABEL name "NezukoChan Image Proxy (Docker Build)"
 LABEL maintainer "KagChi"
@@ -9,7 +9,7 @@ COPY . .
 
 RUN go build
 
-FROM golang:1.20
+FROM golang:1.20-alpine
 
 LABEL name "NezukoChan Image Proxy"
 LABEL maintainer "KagChi"
