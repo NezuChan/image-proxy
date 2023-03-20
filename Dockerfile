@@ -21,7 +21,7 @@ LABEL maintainer "KagChi"
 WORKDIR /app
 
 # Install needed deps
-RUN apk add libc vips gcc g++ make
+RUN apk add vips
 
 COPY --from=build-stage /tmp/build/main main
 
