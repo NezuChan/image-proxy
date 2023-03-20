@@ -1,11 +1,12 @@
-module image-proxy
+module github.com/nezuchan/image-proxy
 
 go 1.20
 
 require (
+	github.com/davidbyttow/govips/v2 v2.11.0
+	github.com/go-resty/resty/v2 v2.7.0
 	github.com/gofiber/fiber/v2 v2.42.0
 	github.com/joho/godotenv v1.5.1
-	github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646
 )
 
 require (
@@ -23,5 +24,8 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.44.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
-	golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab // indirect
+	golang.org/x/image v0.6.0 // indirect
+	golang.org/x/net v0.8.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/text v0.8.0 // indirect
 )

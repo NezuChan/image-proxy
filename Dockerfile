@@ -7,7 +7,11 @@ WORKDIR /tmp/build
 
 COPY . .
 
-RUN go build
+# Install needed deps
+RUN apk add libc-dev vips-dev gcc g++ make
+
+# Build the project
+RUN go build cmd/server/main.go
 
 FROM golang:1.20-alpine
 
@@ -16,6 +20,6 @@ LABEL maintainer "KagChi"
 
 WORKDIR /app
 
-COPY --from=build-stage /tmp/build/image-proxy image-proxy
+COPY --from=build-stage /tmp/build/main main
 
-CMD ./image-proxy
+CMD ["./main"]

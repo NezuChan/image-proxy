@@ -1,0 +1,16 @@
+name: Build go project
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  test:
+    uses: nezuchan/workflows/.github/workflows/golang-compile-test.yml@main
+    with:
+      ADDITIONAL_PACKAGES: "libvips-dev"
+      TARGET_FILE: "cmd/server/main.go"
