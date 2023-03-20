@@ -15,7 +15,7 @@
 
 -   [libvips](https://github.com/libvips/libvips) 8.10+
 -   C compatible compiler such as gcc 4.6+ or clang 3.0+
--   Go 1.14+
+-   Go 1.19+
 
 ## Dependencies for govips
 
