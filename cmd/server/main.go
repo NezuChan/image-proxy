@@ -23,11 +23,7 @@ func main() {
 	vips.Startup(nil)
 	defer vips.Shutdown()
 
-	err := godotenv.Load(".env")
-	if err != nil {
-		panic("couldn't load .env file")
-	}
-
+	_ = godotenv.Load()
 	app := fiber.New()
 
 	app.Use(logger.New(logger.Config{
