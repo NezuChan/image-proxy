@@ -47,13 +47,7 @@ sudo apt -y install libvips-dev
 
 The recommended approach on Windows is to use Govips via WSL and Ubuntu.
 
-If you need to run Govips natively on Windows, it's not difficult but will require some effort. We don't have a recommended environment or setup at the moment. Windows is also not in our list of CI/CD targets so Govips is not regularly tested for compatibility. If you would be willing to setup and maintain a robust CI/CD Windows environment, please open a PR, we would be pleased to accept your contribution and support Windows as a platform.
-
-## Installation
-
-```bash
-go get -u github.com/davidbyttow/govips/v2/vips
-```
+If you need to run Govips natively on Windows, it's not difficult but will require some effort.
 
 ### MacOS note
 
