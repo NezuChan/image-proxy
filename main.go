@@ -1,14 +1,15 @@
 package main
 
 import (
+	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/hex"
 	"fmt"
-	"github.com/discord/lilliput"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
-	"io"
+	"github.com/nfnt/resize"
+	"image/jpeg"
 	"net/http"
 	"os"
 	"strconv"
@@ -74,44 +75,16 @@ func main() {
 
 		defer resp.Body.Close()
 
-		imageData, err := io.ReadAll(resp.Body)
-		if err != nil {
-			panic(err)
-		}
+		imageData, _ := jpeg.Decode(resp.Body)
 
-		decoder, _ := lilliput.NewDecoder(imageData)
-		header, _ := decoder.Header()
+		outputImg := resize.Resize(uint(x), uint(y), imageData, resize.NearestNeighbor)
+		buf := new(bytes.Buffer)
+		options := &jpeg.Options{Quality: 100}
+		jpeg.Encode(buf, outputImg, options)
+		output := buf.Bytes()
 
-		ops := lilliput.NewImageOps(8192)
-		defer ops.Close()
-
-		outputImg := make([]byte, 8*x*y)
-
-		if x == 0 {
-			x = header.Width()
-		}
-
-		if y == 0 {
-			y = header.Height()
-		}
-
-		resizeMethod := lilliput.ImageOpsResize
-		if x == header.Width() && y == header.Height() {
-			resizeMethod = lilliput.ImageOpsNoResize
-		}
-
-		opts := &lilliput.ImageOptions{
-			FileType:             ".jpeg",
-			Width:                x,
-			Height:               y,
-			ResizeMethod:         resizeMethod,
-			NormalizeOrientation: true,
-			EncodeOptions:        map[int]int{lilliput.JpegQuality: 100},
-		}
-
-		outputImg, _ = ops.Transform(decoder, opts, outputImg)
 		c.Set("Content-Type", "image/jpeg")
-		return c.Send(outputImg)
+		return c.Send(output)
 	})
 
 	host := os.Getenv("HOST")
