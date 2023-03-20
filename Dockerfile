@@ -8,7 +8,7 @@ WORKDIR /tmp/build
 COPY . .
 
 # Install needed deps
-RUN apk add libc-dev vips gcc g++ make
+RUN apk add libc-dev vips-dev gcc g++ make
 
 # Build the project
 RUN go build cmd/server/main.go
