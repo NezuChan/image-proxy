@@ -85,7 +85,7 @@ func main() {
 		ops := lilliput.NewImageOps(8192)
 		defer ops.Close()
 
-		outputImg := make([]byte, 50*x*y)
+		outputImg := make([]byte, 8*x*y)
 
 		if x == 0 {
 			x = header.Width()
