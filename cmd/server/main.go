@@ -27,7 +27,7 @@ func main() {
 	app := fiber.New()
 
 	app.Use(logger.New(logger.Config{
-		Format: "[${ip}]:${port} ${status} - ${method} ${path}\n",
+		Format: "[${ip}]:${port} [${latency}] ${status} - ${method} ${path}\n",
 	}))
 
 	host := os.Getenv("HOST")
