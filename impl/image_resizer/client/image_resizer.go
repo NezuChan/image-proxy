@@ -35,19 +35,24 @@ img, err := vips.NewImageFromBuffer(image)
     // Get original size of image
     originalWidth := float64(img.Width())
     originalHeight := float64(img.Height())
-
-    // Calculate scale factors for width and height
-    scaleWidth := float64(width) / originalWidth
+	scaleWidth := float64(width) / originalWidth
     scaleHeight := float64(height) / originalHeight
 
-    // Use the smaller scale factor to ensure the entire image fits within the specified dimensions
-    scaleFactor := math.Min(scaleWidth, scaleHeight)
+	scaleFactor := math.Min(scaleWidth, scaleHeight)
 
     if originalWidth == originalHeight {
 		if err = img.Resize(scaleFactor, vips.KernelNearest); err != nil {
 			return
 		}
 	} else {
+		if height < width {
+			width = height
+		}
+
+		if height > int(originalHeight) {
+			height = int(originalHeight)
+		}
+		
     	// Crop the image to the specified dimensions while maintaining the aspect ratio
     	if err = img.SmartCrop(width, height, vips.InterestingCentre); err != nil {
         	return
