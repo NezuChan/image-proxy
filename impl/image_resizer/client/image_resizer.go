@@ -51,6 +51,7 @@ img, err := vips.NewImageFromBuffer(image)
 
 		if height > int(originalHeight) {
 			height = int(originalHeight)
+			width = int(originalHeight)
 		}
 		
     	// Crop the image to the specified dimensions while maintaining the aspect ratio
