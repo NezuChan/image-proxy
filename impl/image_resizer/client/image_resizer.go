@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"os"
 
 	"github.com/davidbyttow/govips/v2/vips"
 	resty "github.com/go-resty/resty/v2"
@@ -73,7 +74,15 @@ img, err := vips.NewImageFromBuffer(image)
 }
 
 func (i imageResizerClient) GetOriginImage(url string) (result []byte, err error) {
-	response, err := i.httpClient.R().Get(url)
+	var imageUrl string;
+
+	if (os.Getenv("COMPRESS_IMAGE") == "true") {
+		imageUrl = fmt.Sprintf("https://wsrv.nl/?url=%s", url)
+	} else {
+		imageUrl = url
+	}
+
+	response, err := i.httpClient.R().Get(imageUrl)
 	if err != nil {
 		return
 	}
