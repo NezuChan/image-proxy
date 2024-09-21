@@ -1,12 +1,14 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"github.com/davidbyttow/govips/v2/vips"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
+	"github.com/nezuchan/image-proxy/domain"
 	"github.com/nezuchan/image-proxy/impl/image_resizer/client"
 	i_http "github.com/nezuchan/image-proxy/impl/image_resizer/handler/http"
 	i_uc "github.com/nezuchan/image-proxy/impl/image_resizer/usecase"
@@ -38,9 +40,9 @@ func main() {
 				code = e.Code
 			}
 
-			return ctx.Status(code).JSON(&struct_type.ErrorResponse{
-				Message: "Something went wrong, please try again later.",
-				Error:   err.Error(),
+			return ctx.Status(code).JSON(domain.ImageResizerHTTPResponse{
+				StatusCode: code,
+				Message:    err.Error(),
 			})
 		},
 	})
