@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/davidbyttow/govips/v2 v2.16.0
 	github.com/go-resty/resty/v2 v2.16.5
-	github.com/gofiber/fiber/v2 v2.52.8
+	github.com/gofiber/fiber/v2 v2.52.9
 	github.com/joho/godotenv v1.5.1
 )
 
