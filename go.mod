@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/davidbyttow/govips/v2 v2.18.0
 	github.com/go-resty/resty/v2 v2.17.2
-	github.com/gofiber/fiber/v2 v2.52.13
+	github.com/gofiber/fiber/v3 v3.2.0
 	github.com/gofiber/fiber/v3 v3.2.0
 	github.com/joho/godotenv v1.5.1
 )
